@@ -72,13 +72,29 @@ function remoteServer(app) {
 }
 
 // connect.static.mime.define('text/cache-manifest', ['appcache']);
+var fs = require('fs');
+var options = {
+    key:    fs.readFileSync('star_giscloud_com.key'),
+    cert:   fs.readFileSync('star_giscloud_com.crt'),
+    ca:     fs.readFileSync('DigiCertCA.crt')
+};
+var https = require('https');
+var app = connect;
+// var app = connect.createServer(
+//   connect.bodyParser(),
+//   connect.logger(),
+//   connect.static(__dirname),
+//   connect.router(remoteServer)
+// );
+var server = https.createServer(options,app).listen(3000);
 
-var server = connect.createServer(
-  connect.bodyParser(),
-  connect.logger(),
-  connect.static(__dirname),
-  connect.router(remoteServer)
-);
+
+// var server = connect.createServer(
+//   connect.bodyParser(),
+//   connect.logger(),
+//   connect.static(__dirname),
+//   connect.router(remoteServer)
+// );
 
 console.log('Listening on ' + port);
 server.listen(port);
